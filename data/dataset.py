@@ -13,3 +13,23 @@ def generate_dataset(n_samples=2000, seed=42):
     y = z.reshape(-1, 1) # turn into (N, 1)
 
     return X, y 
+
+def normalize(X, y):
+    X_mean = X.mean(axis=0) # Get the mean (center) 
+    X_std = X.std(axis=0) + 1e-8 # Get the standard deviation (spread) with epsilon to avoid division by zero
+
+    y_mean = y.mean(axis=0) 
+    y_std = y.std(axis=0) + 1e-8
+
+    # z-score normalization
+    X_norm = (X - X_mean) / X_std 
+    y_norm = (y - y_mean) / y_std
+
+    stats = {
+        "X_mean": X_mean,
+        "X_std": X_std,
+        "y_mean": y_mean,
+        "y_std": y_std
+    }
+
+    return X_norm, y_norm, stats
