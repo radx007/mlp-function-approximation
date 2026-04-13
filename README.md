@@ -14,3 +14,24 @@
 ### Goal
 
 Prepare clean data and understand the function before training the MLP
+
+---
+
+## Step 2: MLP Architecture and Forward Pass
+
+### What we did
+
+* Built a Multilayer Perceptron (MLP) from scratch using NumPy
+* Defined the architecture: [2 → 64 → 64 → 1]
+* Initialized weights using He initialization
+* Implemented activation functions:
+
+  * ReLU for hidden layers
+  * Linear for output layer
+* Implemented the forward pass through all layers
+* Implemented Mean Squared Error (MSE) as the loss function
+* Tested the model by generating predictions and computing the loss
+
+### Goal
+
+Build the neural network structure and ensure it can produce predictions before training
