@@ -9,3 +9,16 @@ class Dense:
         self.X = X  # store for future backprop
         Z = X @ self.W + self.b
         return Z
+    
+    def backward(self, dZ):
+
+        # dW = Xᵀ · δ
+        self.dW = self.X.T @ dZ
+
+        # db = Σ δ
+        self.db = np.sum(dZ, axis=0, keepdims=True)
+
+        # dX = δ · Wᵀ
+        dX = dZ @ self.W.T
+
+        return dX
