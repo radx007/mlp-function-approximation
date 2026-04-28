@@ -1,55 +1,53 @@
-from data.dataset import generate_dataset, normalize
-from model.activations import Linear, ReLU
+from data.dataset import f, generate_dataset, normalize
+from model.activations import Linear, ReLU, Tanh
 from model.layers import Dense
-from model.loss import mse
 from model.mlp import MLP
-from utils.visualization import plot_ground_truth
+from training.trainer import Trainer
+from utils.log import log_model
+from utils.visualization import plot_comparison, plot_ground_truth , plot_loss
+from training.optimizer import SGD
+import json
+from datetime import datetime
 
 def main():
     print("=========================================")
     print("       MLP Function Approximation        ")
     print("=========================================")
 
-    print("[1/6] Generating Raw Data...")
+    print("Generating Raw Data...")
     X_raw, y_raw = generate_dataset(n_samples=2000)
     
-    print("[2/6] Normalizing Dataset (Z-Score)...")
+    print("Normalizing Dataset (Z-Score)...")
     X_train, y_train, stats = normalize(X_raw, y_raw)
     
-    # Check if mean is ~0 and std is ~1
-    print(f"      -> X_train Mean: {X_train.mean(axis=0)}") 
-    print(f"      -> X_train Std:  {X_train.std(axis=0)}")
+    print("Visualizing Ground Truth...")
     
-    print("[3/6] Visualizing Ground Truth...")
-    
-    # Choose your mode: "scatter" or "heatmap"
     plot_ground_truth(X_raw, y_raw, mode="scatter")
 
-    print("\n--- Étape 1 Complete: Data is ready for the MLP ---")
-
-    print("\n[4/6] Building MLP Model...")
+    print("Building MLP Model...")
     layers = [
-            Dense(2, 64),   # first layer
-            ReLU(),         # activation after first layer
-            Dense(64, 64),
-            ReLU(),
+            Dense(2, 128),   # first layer
+            Tanh(),          # activation after first layer
+            Dense(128, 128),
+            Tanh(), 
+            Dense(128, 64),
+            Tanh(),
             Dense(64, 1),
             Linear()
         ]
     model = MLP(layers)
 
-    print("\n[5/6] Performing Forward Pass...")
-    # Forward pass
-    y_pred = model.forward(X_train)
+    optimizer = SGD(model, lr=0.05)
+    trainer = Trainer(model, optimizer)
 
-    print("[6/6] Computing Loss...")
-    # Compute loss
-    loss = mse(y_train, y_pred)
+    print("Starting Training...")
+    trainer.train(X_train, y_train, epochs=2500,plot_fn=plot_loss)
+    print("Training Completed!")
 
-    print("Prediction shape:", y_pred.shape)
-    print("Loss:", loss)
+    plot_comparison(model, f, stats)
+    
+    log_model(model)
 
-    print("\n--- Étape 2 Complete: Forward pass and loss computed ---")
 
 if __name__ == "__main__":
     main()
