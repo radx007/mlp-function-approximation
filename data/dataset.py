@@ -33,3 +33,25 @@ def normalize(X, y):
     }
 
     return X_norm, y_norm, stats
+
+
+def create_mesh(x_range=(-5, 5), y_range=(-5, 5), resolution=100):
+    x = np.linspace(*x_range, resolution)
+    y = np.linspace(*y_range, resolution)
+    return np.meshgrid(x, y)
+
+
+def predict_on_grid(model, X_grid, Y_grid, stats=None):
+    grid_points = np.c_[X_grid.ravel(), Y_grid.ravel()]
+
+    # Normalize
+    if stats is not None:
+        grid_points = (grid_points - stats["X_mean"]) / stats["X_std"]
+
+    Z_pred = model.predict(grid_points)
+
+    # Denormalize
+    if stats is not None:
+        Z_pred = Z_pred * stats["y_std"] + stats["y_mean"]
+
+    return Z_pred.reshape(X_grid.shape)

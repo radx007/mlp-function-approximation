@@ -31,7 +31,7 @@ class Trainer:
                 print(f"Epoch {epoch}, Loss: {loss}")
 
             if plot_fn and epoch % 20 == 0:
-                ax = plot_fn(losses, ax)
+                ax = plot_fn(losses, ax, live=True)
 
         if plot_fn:
             plt.ioff()
