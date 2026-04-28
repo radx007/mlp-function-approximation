@@ -8,6 +8,9 @@ class MLP:
             X = layer.forward(X)
         return X
     
+    def predict(self, X):
+        return self.forward(X)
+    
     def backward(self, grad):
         for layer in reversed(self.layers):
             grad = layer.backward(grad)
