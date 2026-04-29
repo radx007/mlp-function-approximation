@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from data.dataset import create_mesh, predict_on_grid
+from model.loss import mse
 
 
 def plot_ground_truth(X, y, mode="heatmap"):
@@ -52,6 +53,8 @@ def plot_comparison(model, func, stats=None, resolution=100):
 
     Z_true = func(X_grid, Y_grid)
     Z_pred = predict_on_grid(model, X_grid, Y_grid, stats)
+
+    print("mesh mse:", mse(Z_true.flatten(), Z_pred.flatten()))
 
     fig = plt.figure(figsize=(12, 5))
 
