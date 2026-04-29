@@ -55,3 +55,20 @@ def predict_on_grid(model, X_grid, Y_grid, stats=None):
         Z_pred = Z_pred * stats["y_std"] + stats["y_mean"]
 
     return Z_pred.reshape(X_grid.shape)
+
+
+def split_dataset(X, y, train_ratio=0.8, seed=42):
+    np.random.seed(seed)
+
+    indices = np.random.permutation(len(X))
+    split_index = int(len(X) * train_ratio)
+
+    train_indices = indices[:split_index]
+    test_indices = indices[split_index:]
+
+    X_train = X[train_indices]
+    X_test = X[test_indices]
+    y_train = y[train_indices]
+    y_test = y[test_indices]
+
+    return X_train, X_test, y_train, y_test
