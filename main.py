@@ -5,6 +5,7 @@ from model.loss import mse
 from model.mlp import MLP
 from training.trainer import Trainer
 from utils.log import log_model
+from utils.mlp_model import save_model_npz
 from utils.visualization import plot_comparison, plot_ground_truth , plot_loss
 from training.optimizer import SGD
 import json
@@ -52,6 +53,8 @@ def main():
     print("Starting Training...")
     trainer.train(X_train, y_train, epochs=1000, batch_size=32, plot_fn=plot_loss)
     print("Training Completed!")
+
+    save_model_npz(model)
 
     print("Evaluating on Test Set...")
     y_test_pred = model.predict(X_test)
